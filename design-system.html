@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design System — DevTools</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --surface: #1e1e2e;
+    --surface2: #252538;
+    --border: #2a2a40;
+    --border2: #3a3a55;
+    --text: #e8e8f0;
+    --text2: #9090b0;
+    --text3: #5a5a7a;
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --primary-dim: rgba(99,102,241,0.15);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.12);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.12);
+    --red: #ef4444;
+    --cyan: #06b6d4;
+    --cyan-dim: rgba(6,182,212,0.12);
+    --purple: #a855f7;
+    --purple-dim: rgba(168,85,247,0.12);
+    --pink: #ec4899;
+    --pink-dim: rgba(236,72,153,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; background: rgba(10,10,15,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 24px; z-index: 100; display: flex; gap: 0; overflow-x: auto; }
+  .nav-btn { padding: 16px 20px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border: none; background: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--primary-light); border-bottom-color: var(--primary); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 48px 24px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* TYPOGRAPHY */
+  h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+  h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 24px; }
+  h3 { font-size: 15px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+  p { color: var(--text2); font-size: 15px; line-height: 1.7; }
+
+  .label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; background: var(--primary-dim); color: var(--primary-light); border: 1px solid rgba(99,102,241,0.3); }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; }
+  .card-sm { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+
+  .section-title { margin-bottom: 32px; }
+  .section-title p { margin-top: 8px; max-width: 600px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* COLOR SWATCHES */
+  .swatch { height: 56px; border-radius: var(--radius-sm); display: flex; align-items: flex-end; padding: 8px; }
+  .swatch-label { font-size: 10px; font-weight: 600; opacity: 0.8; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text2); }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 0 0 0 var(--primary); }
+  .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.35); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
+  .btn-secondary:hover { border-color: var(--primary); color: var(--primary-light); }
+  .btn-ghost { background: transparent; color: var(--text2); }
+  .btn-ghost:hover { background: var(--surface); color: var(--text); }
+  .btn-lg { padding: 14px 28px; font-size: 16px; border-radius: var(--radius); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .btn-icon { width: 36px; height: 36px; padding: 0; justify-content: center; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* INPUTS */
+  .input { width: 100%; padding: 10px 14px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  .input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-dim); }
+  .input::placeholder { color: var(--text3); }
+  .input-group { display: flex; gap: 8px; align-items: center; }
+  .textarea { min-height: 120px; resize: vertical; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+  /* BADGES */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: var(--green-dim); color: var(--green); }
+  .badge-amber { background: var(--amber-dim); color: var(--amber); }
+  .badge-primary { background: var(--primary-dim); color: var(--primary-light); }
+  .badge-cyan { background: var(--cyan-dim); color: var(--cyan); }
+  .badge-purple { background: var(--purple-dim); color: var(--purple); }
+  .badge-pink { background: var(--pink-dim); color: var(--pink); }
+
+  /* TOOL CARD */
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; }
+  .tool-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary-dim), transparent); opacity: 0; transition: opacity 0.25s; }
+  .tool-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(99,102,241,0.15); }
+  .tool-card:hover::before { opacity: 1; }
+  .tool-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 14px; }
+  .tool-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .tool-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .tool-arrow { position: absolute; top: 16px; right: 16px; color: var(--text3); font-size: 16px; transition: all 0.2s; }
+  .tool-card:hover .tool-arrow { color: var(--primary-light); transform: translate(2px, -2px); }
+
+  /* HERO MOCKUP */
+  .hero-mock { background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 48px 40px; position: relative; overflow: hidden; }
+  .hero-mock::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%); }
+  .hero-mock::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 70%); }
+  .hero-eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+  .hero-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .hero-h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 900; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 20px; }
+  .hero-h1 span { background: linear-gradient(135deg, var(--primary-light), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: 17px; color: var(--text2); max-width: 520px; margin-bottom: 32px; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+  .hero-trust { display: flex; gap: 20px; flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text3); }
+  .trust-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; }
+
+  /* WORKSPACE MOCKUP */
+  .workspace { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  .workspace-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .workspace-title { font-size: 13px; font-weight: 600; color: var(--text2); }
+  .workspace-actions { display: flex; gap: 6px; }
+  .workspace-panels { display: grid; grid-template-columns: 1fr 1fr; }
+  .workspace-panel { padding: 16px; }
+  .workspace-panel:first-child { border-right: 1px solid var(--border); }
+  .panel-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .code-area { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text2); line-height: 1.7; min-height: 120px; }
+  .code-key { color: #f59e0b; }
+  .code-str { color: #22c55e; }
+  .code-num { color: #06b6d4; }
+  .code-brace { color: #818cf8; }
+
+  /* SPACING */
+  .space-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .space-box { background: var(--primary-dim); border: 1px dashed rgba(99,102,241,0.4); border-radius: 4px; }
+  .space-label { font-size: 12px; color: var(--text2); }
+
+  /* NAV MOCKUP */
+  .nav-mock { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .nav-logo { font-size: 16px; font-weight: 800; background: linear-gradient(135deg, var(--primary-light), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-link { font-size: 14px; color: var(--text2); }
+  .nav-search { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 14px; display: flex; align-items: center; gap: 8px; width: 220px; }
+  .nav-search span { font-size: 13px; color: var(--text3); }
+
+  /* CATEGORY TAG */
+  .cat-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .cat-tag:hover, .cat-tag.active { border-color: var(--primary); background: var(--primary-dim); color: var(--primary-light); }
+  .cat-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* FAQ MOCKUP */
+  .faq-item { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 8px; }
+  .faq-q { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .faq-q:hover { background: var(--surface2); }
+  .faq-icon { color: var(--text3); font-size: 18px; }
+  .faq-a { padding: 0 20px 16px; font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* FOOTER MOCKUP */
+  .footer-mock { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+  .footer-col-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+  .footer-link { font-size: 13px; color: var(--text3); margin-bottom: 8px; cursor: pointer; transition: color 0.2s; }
+  .footer-link:hover { color: var(--text2); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 12px; color: var(--text3); }
+
+  /* EXTENSION PAGE MOCKUP */
+  .ext-hero { background: linear-gradient(135deg, var(--bg2), var(--bg3)); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 48px; text-align: center; position: relative; overflow: hidden; margin-bottom: 16px; }
+  .ext-browser { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 12px; max-width: 400px; margin: 0 auto 32px; }
+  .ext-browser-bar { background: var(--bg3); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .ext-browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ext-browser-url { flex: 1; background: var(--bg2); border-radius: 6px; height: 22px; }
+  .ext-popup { background: var(--surface2); border-radius: var(--radius); padding: 12px; }
+  .ext-popup-tool { padding: 8px 12px; border-radius: 8px; font-size: 12px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .ext-popup-tool.active { background: var(--primary-dim); color: var(--primary-light); }
+
+  /* COMPARE TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); }
+  .compare-table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { color: var(--text); font-weight: 500; }
+  .compare-table td:not(:first-child) { text-align: center; color: var(--text2); }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); }
+  .partial { color: var(--amber); }
+  .highlight-col { background: var(--primary-dim); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .workspace-panels { grid-template-columns: 1fr; }
+    .workspace-panel:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="show('overview')">Overview</button>
+  <button class="nav-btn" onclick="show('colors')">Colors</button>
+  <button class="nav-btn" onclick="show('typography')">Typography</button>
+  <button class="nav-btn" onclick="show('components')">Components</button>
+  <button class="nav-btn" onclick="show('homepage')">Home Page</button>
+  <button class="nav-btn" onclick="show('toolpage')">Tool Page</button>
+  <button class="nav-btn" onclick="show('extension')">Extension Page</button>
+  <button class="nav-btn" onclick="show('ux')">UX Principles</button>
+</div>
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<div class="section active" id="overview">
+  <div class="section-title">
+    <div class="chip" style="margin-bottom:16px">Design System v1.0</div>
+    <h1>Clean. Approachable.<br><span style="color:var(--primary-light)">Built for everyone.</span></h1>
+    <p style="margin-top:16px;font-size:16px">A dark-first design system that makes complex developer tools feel simple, trustworthy, and instantly usable — even for non-technical users.</p>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:40px">
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:12px">🌙</div>
+      <div style="font-weight:600;margin-bottom:6px">Dark First</div>
+      <p style="font-size:13px">Reduces eye strain for developers. Light mode available as preference.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:12px">⚡</div>
+      <div style="font-weight:600;margin-bottom:6px">Zero Friction</div>
+      <p style="font-size:13px">Paste input → see output instantly. No login, no signup, no waiting.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:12px">🧭</div>
+      <div style="font-weight:600;margin-bottom:6px">Always Clear</div>
+      <p style="font-size:13px">Labels, placeholders, and helper text guide any user at any skill level.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:12px">📱</div>
+      <div style="font-weight:600;margin-bottom:6px">Mobile Ready</div>
+      <p style="font-size:13px">Full tools accessible on mobile. Stacked layout, large touch targets.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:12px">♿</div>
+      <div style="font-weight:600;margin-bottom:6px">Accessible</div>
+      <p style="font-size:13px">WCAG AA contrast ratios. Full keyboard navigation. Screen reader labels.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:28px;margin-bottom:12px">🔍</div>
+      <div style="font-weight:600;margin-bottom:6px">SEO Structured</div>
+      <p style="font-size:13px">Every page designed with heading hierarchy and schema markup in mind.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2>Design Personality</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>We are</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="font-size:14px">Clean & minimal — whitespace is intentional</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="font-size:14px">Confident — clear labels, no guessing</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="font-size:14px">Friendly — approachable copy, no jargon</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="font-size:14px">Fast — instant feedback on every action</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--green);font-weight:700">✓</span><span style="font-size:14px">Trustworthy — privacy badges, no dark patterns</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>We are not</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--red);font-weight:700">✗</span><span style="font-size:14px">Cluttered — no unnecessary UI elements</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--red);font-weight:700">✗</span><span style="font-size:14px">Gimmicky — no animations that don't serve UX</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--red);font-weight:700">✗</span><span style="font-size:14px">Overwhelming — tools are focused, one task each</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--red);font-weight:700">✗</span><span style="font-size:14px">Aggressive — no popups, no pushy modals</span></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--red);font-weight:700">✗</span><span style="font-size:14px">Gated — no login walls, no paywalls on tools</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ COLORS ═══════════ -->
+<div class="section" id="colors">
+  <div class="section-title">
+    <h2>Color System</h2>
+    <p>A deep dark background with a single indigo primary accent. Category colors are used sparingly to differentiate tool types — never decoratively.</p>
+  </div>
+
+  <h3>Background Scale</h3>
+  <div class="grid-4" style="margin-bottom:32px">
+    <div><div class="swatch" style="background:#0a0a0f;border:1px solid #2a2a40"><span class="swatch-label" style="color:#444">#0a0a0f</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">BG Base</div><div class="mono">#0a0a0f</div></div></div>
+    <div><div class="swatch" style="background:#111118"><span class="swatch-label" style="color:#555">#111118</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">BG Raised</div><div class="mono">#111118</div></div></div>
+    <div><div class="swatch" style="background:#1a1a24"><span class="swatch-label" style="color:#666">#1a1a24</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">BG High</div><div class="mono">#1a1a24</div></div></div>
+    <div><div class="swatch" style="background:#1e1e2e"><span class="swatch-label" style="color:#777">#1e1e2e</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Surface</div><div class="mono">#1e1e2e</div></div></div>
+  </div>
+
+  <h3>Primary & Accent</h3>
+  <div class="grid-4" style="margin-bottom:32px">
+    <div><div class="swatch" style="background:#6366f1"><span class="swatch-label">Indigo 500</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Primary</div><div class="mono">#6366f1</div></div></div>
+    <div><div class="swatch" style="background:#818cf8"><span class="swatch-label">Indigo 400</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Primary Light</div><div class="mono">#818cf8</div></div></div>
+    <div><div class="swatch" style="background:#a855f7"><span class="swatch-label">Purple 500</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Accent</div><div class="mono">#a855f7</div></div></div>
+    <div><div class="swatch" style="background:linear-gradient(135deg,#6366f1,#a855f7)"><span class="swatch-label">→</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Brand Gradient</div><div class="mono">indigo→purple</div></div></div>
+  </div>
+
+  <h3>Category Colors (tool type indicators)</h3>
+  <div class="grid-4" style="margin-bottom:32px">
+    <div><div class="swatch" style="background:var(--amber);"><span class="swatch-label">JSON</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Amber</div><div class="mono">#f59e0b</div></div></div>
+    <div><div class="swatch" style="background:var(--cyan)"><span class="swatch-label">Encoding</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Cyan</div><div class="mono">#06b6d4</div></div></div>
+    <div><div class="swatch" style="background:var(--green)"><span class="swatch-label">Security</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Green</div><div class="mono">#22c55e</div></div></div>
+    <div><div class="swatch" style="background:var(--pink)"><span class="swatch-label">Color Tools</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Pink</div><div class="mono">#ec4899</div></div></div>
+    <div><div class="swatch" style="background:#3b82f6"><span class="swatch-label">CSS</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Blue</div><div class="mono">#3b82f6</div></div></div>
+    <div><div class="swatch" style="background:#f97316"><span class="swatch-label">JavaScript</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Orange</div><div class="mono">#f97316</div></div></div>
+    <div><div class="swatch" style="background:var(--purple)"><span class="swatch-label">Text</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Purple</div><div class="mono">#a855f7</div></div></div>
+    <div><div class="swatch" style="background:#14b8a6"><span class="swatch-label">Network</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Teal</div><div class="mono">#14b8a6</div></div></div>
+  </div>
+
+  <h3>Semantic Colors</h3>
+  <div class="grid-4">
+    <div><div class="swatch" style="background:var(--green)"><span class="swatch-label">Success</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Success</div><div class="mono">#22c55e</div></div></div>
+    <div><div class="swatch" style="background:var(--red)"><span class="swatch-label">Error</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Error</div><div class="mono">#ef4444</div></div></div>
+    <div><div class="swatch" style="background:var(--amber)"><span class="swatch-label">Warning</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Warning</div><div class="mono">#f59e0b</div></div></div>
+    <div><div class="swatch" style="background:var(--cyan)"><span class="swatch-label">Info</span></div><div style="margin-top:8px"><div style="font-size:13px;font-weight:600">Info</div><div class="mono">#06b6d4</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ TYPOGRAPHY ═══════════ -->
+<div class="section" id="typography">
+  <div class="section-title">
+    <h2>Typography</h2>
+    <p>Two fonts only. Inter for all UI and content. JetBrains Mono exclusively for code input/output areas.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Display / Hero</h3>
+    <div style="font-size:48px;font-weight:900;letter-spacing:-0.04em;line-height:1.05;margin-bottom:8px">Free Developer Tools</div>
+    <div class="mono" style="color:var(--text3)">Inter 900 · 48px · -0.04em tracking · 1.05 line-height</div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Heading 1 — Page Title</h3>
+    <div style="font-size:36px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px">JSON Formatter & Validator</div>
+    <div class="mono" style="color:var(--text3)">Inter 800 · 36px · -0.03em tracking</div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Heading 2 — Section Title</h3>
+    <div style="font-size:24px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px">Related Tools</div>
+    <div class="mono" style="color:var(--text3)">Inter 700 · 24px · -0.02em tracking</div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Heading 3 — Label / Category</h3>
+    <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);margin-bottom:8px">JSON Tools</div>
+    <div class="mono" style="color:var(--text3)">Inter 600 · 12px · UPPERCASE · 0.08em tracking</div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Body — Default</h3>
+    <div style="font-size:15px;line-height:1.7;color:var(--text2);max-width:600px;margin-bottom:8px">The JSON Formatter automatically validates and beautifies your raw JSON data. Simply paste any minified or unformatted JSON and instantly get a clean, indented, human-readable output.</div>
+    <div class="mono" style="color:var(--text3)">Inter 400 · 15px · 1.7 line-height · text2 color</div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Code / Monospace</h3>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;color:var(--text2);margin-bottom:8px">
+      <span style="color:var(--primary-light)">{</span><br>
+      &nbsp;&nbsp;<span style="color:var(--amber)">"name"</span>: <span style="color:var(--green)">"DevTools"</span>,<br>
+      &nbsp;&nbsp;<span style="color:var(--amber)">"version"</span>: <span style="color:var(--cyan)">1</span><br>
+      <span style="color:var(--primary-light)">}</span>
+    </div>
+    <div class="mono" style="color:var(--text3)">JetBrains Mono 400 · 13px · 1.8 line-height</div>
+  </div>
+
+  <div class="card">
+    <h3>Helper / Caption</h3>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:8px">No data is stored. All processing happens in your browser.</div>
+    <div class="mono" style="color:var(--text3)">Inter 400 · 12px · text3 color</div>
+  </div>
+</div>
+
+<!-- ═══════════ COMPONENTS ═══════════ -->
+<div class="section" id="components">
+  <div class="section-title">
+    <h2>Components</h2>
+  </div>
+
+  <!-- Buttons -->
+  <h3>Buttons</h3>
+  <div class="card" style="margin-bottom:24px">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:20px">
+      <button class="btn btn-primary btn-lg">⬇ Install Extension</button>
+      <button class="btn btn-primary">Format JSON</button>
+      <button class="btn btn-secondary">⬇ Download</button>
+      <button class="btn btn-secondary">📋 Copy</button>
+      <button class="btn btn-ghost">Clear</button>
+      <button class="btn btn-primary btn-sm">Try Free</button>
+      <button class="btn btn-green">✓ Copied!</button>
+    </div>
+    <p style="font-size:13px">Primary = main action per view. Secondary = supporting actions. Ghost = destructive or dismissal actions (Clear, Cancel).</p>
+  </div>
+
+  <!-- Inputs -->
+  <h3>Inputs & Workspace</h3>
+  <div class="card" style="margin-bottom:24px">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:500px;margin-bottom:16px">
+      <div>
+        <div class="label">Input label</div>
+        <input class="input" placeholder="Paste your JSON here..." />
+      </div>
+      <div>
+        <div class="label">Search tools</div>
+        <div class="input-group">
+          <input class="input" placeholder="🔍  Search 50+ tools..." style="flex:1"/>
+        </div>
+      </div>
+      <div>
+        <div class="label">Code input</div>
+        <textarea class="input textarea" placeholder='{"name": "paste JSON here"}'></textarea>
+      </div>
+    </div>
+    <p style="font-size:13px">Inputs use monospace font for code areas. All inputs have visible placeholder text explaining exactly what to paste or type.</p>
+  </div>
+
+  <!-- Badges -->
+  <h3>Badges & Tags</h3>
+  <div class="card" style="margin-bottom:24px">
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+      <span class="badge badge-green">✓ Free</span>
+      <span class="badge badge-green">✓ No Login</span>
+      <span class="badge badge-primary">JSON</span>
+      <span class="badge badge-cyan">Encoding</span>
+      <span class="badge badge-purple">Text</span>
+      <span class="badge badge-pink">Color</span>
+      <span class="badge badge-amber">⭐ Popular</span>
+      <span class="badge" style="background:var(--green-dim);color:var(--green)">🔒 Private</span>
+    </div>
+    <div class="cat-tags">
+      <div class="cat-tag active">All Tools</div>
+      <div class="cat-tag">JSON</div>
+      <div class="cat-tag">CSS</div>
+      <div class="cat-tag">Security</div>
+      <div class="cat-tag">Encoding</div>
+      <div class="cat-tag">Color</div>
+    </div>
+  </div>
+
+  <!-- Tool Cards -->
+  <h3>Tool Cards</h3>
+  <div class="grid-3" style="margin-bottom:24px">
+    <div class="tool-card">
+      <div class="tool-icon" style="background:var(--amber-dim)">🔧</div>
+      <div class="tool-name">JSON Formatter</div>
+      <div class="tool-desc">Beautify and validate JSON in one click</div>
+      <div class="tool-arrow">↗</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:var(--cyan-dim)">🔐</div>
+      <div class="tool-name">Base64 Encoder</div>
+      <div class="tool-desc">Encode and decode Base64 strings instantly</div>
+      <div class="tool-arrow">↗</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon" style="background:var(--green-dim)">🔑</div>
+      <div class="tool-name">Password Generator</div>
+      <div class="tool-desc">Generate strong, secure passwords</div>
+      <div class="tool-arrow">↗</div>
+    </div>
+  </div>
+
+  <!-- Workspace -->
+  <h3>Tool Workspace</h3>
+  <div class="workspace" style="margin-bottom:24px">
+    <div class="workspace-header">
+      <div class="workspace-title">JSON Formatter</div>
+      <div class="workspace-actions">
+        <button class="btn btn-sm btn-secondary">Minify</button>
+        <button class="btn btn-sm btn-primary">Format ↵</button>
+      </div>
+    </div>
+    <div class="workspace-panels">
+      <div class="workspace-panel">
+        <div class="panel-label">📥 Input — Paste your JSON</div>
+        <div class="code-area"><span class="code-brace">{"name":"John","age":30,"city":"New York","active":true}</span></div>
+      </div>
+      <div class="workspace-panel">
+        <div class="panel-label">📤 Output — Formatted result</div>
+        <div class="code-area">
+          <span class="code-brace">{</span><br>
+          &nbsp;&nbsp;<span class="code-key">"name"</span>: <span class="code-str">"John"</span>,<br>
+          &nbsp;&nbsp;<span class="code-key">"age"</span>: <span class="code-num">30</span>,<br>
+          &nbsp;&nbsp;<span class="code-key">"city"</span>: <span class="code-str">"New York"</span>,<br>
+          &nbsp;&nbsp;<span class="code-key">"active"</span>: <span class="code-num">true</span><br>
+          <span class="code-brace">}</span>
+        </div>
+      </div>
+    </div>
+    <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
+      <button class="btn btn-sm btn-secondary">📋 Copy</button>
+      <button class="btn btn-sm btn-secondary">⬇ Download</button>
+      <button class="btn btn-sm btn-ghost">🗑 Clear</button>
+      <span style="margin-left:auto;font-size:12px;color:var(--green)">✓ Valid JSON</span>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <h3>FAQ Accordion</h3>
+  <div style="margin-bottom:24px">
+    <div class="faq-item">
+      <div class="faq-q">What is a JSON Formatter and what does it do? <span class="faq-icon">+</span></div>
+      <div class="faq-a">A JSON Formatter takes raw, minified, or poorly indented JSON and transforms it into a clean, readable format with proper indentation and line breaks.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is this tool free to use? <span class="faq-icon">+</span></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does it store or share my data? <span class="faq-icon">+</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ HOME PAGE ═══════════ -->
+<div class="section" id="homepage">
+  <div class="section-title">
+    <h2>Home Page Layout</h2>
+    <p>Structured in 6 clear sections. Zero ambiguity — a first-time visitor immediately knows what the site does and how to start.</p>
+  </div>
+
+  <!-- Nav Mockup -->
+  <div class="label">Section 1 — Navigation</div>
+  <div class="nav-mock" style="margin-bottom:24px">
+    <div class="nav-logo">⚡ DevTools</div>
+    <div class="nav-links">
+      <span class="nav-link">Tools</span>
+      <span class="nav-link">Extension</span>
+      <span class="nav-link">Blog</span>
+    </div>
+    <div class="nav-search">
+      <span>🔍</span>
+      <span>Search 50+ tools...</span>
+    </div>
+    <button class="btn btn-primary btn-sm">Install Extension</button>
+  </div>
+
+  <!-- Hero -->
+  <div class="label">Section 2 — Hero</div>
+  <div class="hero-mock" style="margin-bottom:24px">
+    <div style="position:relative;z-index:1">
+      <div class="hero-eyebrow">
+        <div class="hero-dot"></div>
+        <span style="font-size:13px;color:var(--text2)">50+ free tools · No login required</span>
+      </div>
+      <div class="hero-h1">The Developer Toolkit<br>for <span>Everyone.</span></div>
+      <div class="hero-sub">Format JSON, decode JWTs, generate passwords, convert colors and more — instantly in your browser. No signup. No cost. Ever.</div>
+      <div class="hero-btns">
+        <button class="btn btn-primary btn-lg">🚀 Explore All Tools</button>
+        <button class="btn btn-secondary btn-lg">⬇ Install Chrome Extension</button>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><div class="trust-dot"></div>No login required</div>
+        <div class="trust-item"><div class="trust-dot"></div>Works offline</div>
+        <div class="trust-item"><div class="trust-dot"></div>100% private</div>
+        <div class="trust-item"><div class="trust-dot"></div>Open source</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category filter -->
+  <div class="label">Section 3 — Category Filter + Tool Cards</div>
+  <div class="card" style="margin-bottom:24px">
+    <div class="cat-tags" style="margin-bottom:20px">
+      <div class="cat-tag active">All Tools</div>
+      <div class="cat-tag">🟡 JSON</div>
+      <div class="cat-tag">🔵 CSS</div>
+      <div class="cat-tag">🟢 Security</div>
+      <div class="cat-tag">🔷 Encoding</div>
+      <div class="cat-tag">🔴 Color</div>
+      <div class="cat-tag">🟣 Text</div>
+      <div class="cat-tag">🟠 JavaScript</div>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">🟡 JSON Tools</div>
+    <div class="grid-3">
+      <div class="tool-card"><div class="tool-icon" style="background:var(--amber-dim)">📋</div><div class="tool-name">JSON Formatter</div><div class="tool-desc">Beautify and validate JSON</div><div class="tool-arrow">↗</div></div>
+      <div class="tool-card"><div class="tool-icon" style="background:var(--amber-dim)">🗜</div><div class="tool-name">JSON Minifier</div><div class="tool-desc">Compress JSON to smallest size</div><div class="tool-arrow">↗</div></div>
+      <div class="tool-card"><div class="tool-icon" style="background:var(--amber-dim)">⇄</div><div class="tool-name">JSON to CSV</div><div class="tool-desc">Convert JSON arrays to CSV</div><div class="tool-arrow">↗</div></div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="label">Section 4 — Why Use This</div>
+  <div class="card" style="margin-bottom:24px">
+    <div class="grid-4">
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:32px;margin-bottom:10px">⚡</div>
+        <div style="font-weight:600;margin-bottom:4px">Instant Results</div>
+        <div style="font-size:13px;color:var(--text2)">No loading, no waiting. Results appear as you type.</div>
+      </div>
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:32px;margin-bottom:10px">🔒</div>
+        <div style="font-weight:600;margin-bottom:4px">100% Private</div>
+        <div style="font-size:13px;color:var(--text2)">All processing in your browser. Nothing leaves your device.</div>
+      </div>
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:32px;margin-bottom:10px">🆓</div>
+        <div style="font-weight:600;margin-bottom:4px">Always Free</div>
+        <div style="font-size:13px;color:var(--text2)">No plans, no limits, no credit card. Ever.</div>
+      </div>
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:32px;margin-bottom:10px">📱</div>
+        <div style="font-weight:600;margin-bottom:4px">Works Anywhere</div>
+        <div style="font-size:13px;color:var(--text2)">Desktop, tablet, or mobile. Any modern browser.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extension CTA -->
+  <div class="label">Section 5 — Extension CTA</div>
+  <div style="background:linear-gradient(135deg,var(--primary-dim),var(--purple-dim));border:1px solid rgba(99,102,241,0.3);border-radius:var(--radius-lg);padding:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;margin-bottom:24px">
+    <div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:6px">Take your tools everywhere</div>
+      <div style="font-size:14px;color:var(--text2)">Install the Chrome Extension and access all 50+ tools in one click — right from your toolbar.</div>
+    </div>
+    <button class="btn btn-primary btn-lg">⬇ Add to Chrome — Free</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="label">Section 6 — Footer</div>
+  <div class="footer-mock">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;background:linear-gradient(135deg,var(--primary-light),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px">⚡ DevTools</div>
+        <p style="font-size:13px;max-width:240px;margin-bottom:16px">50+ free developer tools. No signup, no limits, no cost.</p>
+        <div style="display:flex;gap:8px"><span class="badge badge-green">Free</span><span class="badge badge-primary">Open Source</span></div>
+      </div>
+      <div>
+        <div class="footer-col-title">JSON Tools</div>
+        <div class="footer-link">JSON Formatter</div>
+        <div class="footer-link">JSON Minifier</div>
+        <div class="footer-link">JSON to CSV</div>
+        <div class="footer-link">JWT Decoder</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Security</div>
+        <div class="footer-link">Password Generator</div>
+        <div class="footer-link">UUID Generator</div>
+        <div class="footer-link">Hash Generator</div>
+        <div class="footer-link">Bcrypt Generator</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-link">Extension</div>
+        <div class="footer-link">Blog</div>
+        <div class="footer-link">GitHub</div>
+        <div class="footer-link">Privacy Policy</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 DevTools. All tools are free forever.</div>
+      <div style="display:flex;gap:16px"><span class="footer-link">Privacy</span><span class="footer-link">Terms</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TOOL PAGE ═══════════ -->
+<div class="section" id="toolpage">
+  <div class="section-title">
+    <h2>Tool Page Layout</h2>
+    <p>Every tool page follows the exact same structure. Familiarity = trust. Users who use one tool immediately know how to use all others.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:32px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;color:var(--text3)">Home</span>
+      <span style="color:var(--text3)">›</span>
+      <span style="font-size:12px;color:var(--text3)">Tools</span>
+      <span style="color:var(--text3)">›</span>
+      <span style="font-size:12px;color:var(--primary-light)">JSON Formatter</span>
+      <span class="badge badge-amber" style="margin-left:auto">JSON</span>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px">
+      <div style="font-size:28px;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px">JSON Formatter & Validator</div>
+      <div style="font-size:15px;color:var(--text2);margin-bottom:16px">Instantly format, beautify, and validate your JSON. Paste messy JSON and get clean, readable output in one click.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span class="badge badge-green">✓ Free</span>
+        <span class="badge badge-green">✓ Private</span>
+        <span class="badge badge-green">✓ Instant</span>
+        <span class="badge" style="background:var(--surface2);color:var(--text2)">⬇ Works Offline</span>
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface);display:flex;gap:8px;align-items:center">
+        <button class="btn btn-sm btn-secondary">Minify</button>
+        <button class="btn btn-sm btn-secondary">Validate</button>
+        <button class="btn btn-sm btn-primary" style="margin-left:auto">✨ Format</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr">
+        <div style="padding:20px;border-right:1px solid var(--border)">
+          <div class="panel-label">📥 Paste your JSON</div>
+          <div class="code-area" style="color:var(--text3)">{"name":"John","age":30,"city":"New York"}</div>
+        </div>
+        <div style="padding:20px">
+          <div class="panel-label">📤 Formatted output</div>
+          <div class="code-area"><span class="code-brace">{</span><br>&nbsp;&nbsp;<span class="code-key">"name"</span>: <span class="code-str">"John"</span>,<br>&nbsp;&nbsp;<span class="code-key">"age"</span>: <span class="code-num">30</span>,<br>&nbsp;&nbsp;<span class="code-key">"city"</span>: <span class="code-str">"New York"</span><br><span class="code-brace">}</span></div>
+        </div>
+      </div>
+      <div style="padding:10px 16px;border-top:1px solid var(--border);background:var(--surface);display:flex;gap:8px;align-items:center">
+        <button class="btn btn-sm btn-green">✓ Copied!</button>
+        <button class="btn btn-sm btn-secondary">⬇ Download</button>
+        <button class="btn btn-sm btn-ghost">Clear</button>
+        <span style="margin-left:auto;font-size:12px;color:var(--green)">✓ Valid JSON · 3 keys</span>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(90deg,var(--primary-dim),var(--purple-dim));border:1px solid rgba(99,102,241,0.25);border-radius:var(--radius);padding:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div><div style="font-weight:600;font-size:15px">Use JSON Formatter directly in Chrome</div><div style="font-size:13px;color:var(--text2)">Access all tools from your toolbar — no tab switching.</div></div>
+      <button class="btn btn-primary">⬇ Install Extension</button>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px">
+      <div style="font-size:17px;font-weight:700;margin-bottom:12px">About this tool</div>
+      <p>The JSON Formatter takes raw, unformatted JSON and instantly transforms it into clean, indented, human-readable output. It also validates your JSON in real time — highlighting any syntax errors before you waste time debugging.</p>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px">
+      <div style="font-size:17px;font-weight:700;margin-bottom:16px">Related Tools</div>
+      <div class="grid-4">
+        <div class="tool-card" style="padding:14px"><div class="tool-icon" style="background:var(--amber-dim);width:36px;height:36px;font-size:18px;margin-bottom:10px">🗜</div><div class="tool-name" style="font-size:13px">JSON Minifier</div><div class="tool-arrow" style="font-size:14px">↗</div></div>
+        <div class="tool-card" style="padding:14px"><div class="tool-icon" style="background:var(--amber-dim);width:36px;height:36px;font-size:18px;margin-bottom:10px">⇄</div><div class="tool-name" style="font-size:13px">JSON to YAML</div><div class="tool-arrow" style="font-size:14px">↗</div></div>
+        <div class="tool-card" style="padding:14px"><div class="tool-icon" style="background:var(--cyan-dim);width:36px;height:36px;font-size:18px;margin-bottom:10px">🔐</div><div class="tool-name" style="font-size:13px">JWT Decoder</div><div class="tool-arrow" style="font-size:14px">↗</div></div>
+        <div class="tool-card" style="padding:14px"><div class="tool-icon" style="background:var(--amber-dim);width:36px;height:36px;font-size:18px;margin-bottom:10px">📊</div><div class="tool-name" style="font-size:13px">JSON to CSV</div><div class="tool-arrow" style="font-size:14px">↗</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px">
+      <div style="font-size:17px;font-weight:700;margin-bottom:16px">Frequently Asked Questions</div>
+      <div class="faq-item"><div class="faq-q">What is a JSON Formatter? <span class="faq-icon">+</span></div></div>
+      <div class="faq-item"><div class="faq-q">Is my data safe? <span class="faq-icon">+</span></div></div>
+      <div class="faq-item"><div class="faq-q">Does it work offline? <span class="faq-icon">+</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ EXTENSION PAGE ═══════════ -->
+<div class="section" id="extension">
+  <div class="section-title">
+    <h2>Extension Landing Page</h2>
+  </div>
+
+  <div class="ext-hero">
+    <div style="position:relative;z-index:1;text-align:center">
+      <div class="chip" style="margin:0 auto 20px">⭐ Rated 4.9 on Chrome Web Store</div>
+      <div style="font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-0.04em;line-height:1.1;margin-bottom:16px">The Ultimate Developer Toolkit<br><span style="background:linear-gradient(135deg,var(--primary-light),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Right in Your Browser</span></div>
+      <div style="font-size:16px;color:var(--text2);max-width:520px;margin:0 auto 28px">50+ developer tools, one click away. No tab switching. No searching. Just install and build faster.</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px">
+        <button class="btn btn-primary btn-lg">⬇ Add to Chrome — It's Free</button>
+        <button class="btn btn-secondary btn-lg">Watch Demo ▶</button>
+      </div>
+      <div class="ext-browser" style="text-align:left">
+        <div class="ext-browser-bar">
+          <div class="ext-browser-dot" style="background:#ef4444"></div>
+          <div class="ext-browser-dot" style="background:#f59e0b"></div>
+          <div class="ext-browser-dot" style="background:#22c55e"></div>
+          <div class="ext-browser-url"></div>
+          <div style="font-size:18px">🧩</div>
+        </div>
+        <div class="ext-popup">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.08em">⚡ DevTools</div>
+          <div class="ext-popup-tool active">📋 JSON Formatter</div>
+          <div class="ext-popup-tool" style="color:var(--text2)">🔐 Base64 Encoder</div>
+          <div class="ext-popup-tool" style="color:var(--text2)">🔑 Password Generator</div>
+          <div class="ext-popup-tool" style="color:var(--text2)">🔒 Hash Generator</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px">
+    <h3 style="text-align:center;margin-bottom:16px">How it compares</h3>
+    <div class="card">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th style="color:var(--primary-light)">⚡ DevTools Extension</th>
+            <th>Visiting websites</th>
+            <th>Other extensions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Works offline</td><td class="check highlight-col">✓ Yes</td><td class="cross">✗ No</td><td class="partial">⚠ Some</td></tr>
+          <tr><td>No account needed</td><td class="check highlight-col">✓ Yes</td><td class="partial">⚠ Some</td><td class="partial">⚠ Some</td></tr>
+          <tr><td>50+ tools in one place</td><td class="check highlight-col">✓ Yes</td><td class="cross">✗ No</td><td class="cross">✗ No</td></tr>
+          <tr><td>One-click access</td><td class="check highlight-col">✓ Yes</td><td class="cross">✗ No</td><td class="partial">⚠ Varies</td></tr>
+          <tr><td>Free forever</td><td class="check highlight-col">✓ Yes</td><td class="partial">⚠ Some</td><td class="partial">⚠ Some</td></tr>
+          <tr><td>Privacy-first</td><td class="check highlight-col">✓ Yes</td><td class="partial">⚠ Varies</td><td class="partial">⚠ Varies</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ UX PRINCIPLES ═══════════ -->
+<div class="section" id="ux">
+  <div class="section-title">
+    <h2>UX Principles</h2>
+    <p>These rules govern every design decision. Any component that violates these principles gets redesigned.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div class="card" style="border-left:3px solid var(--primary)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">① Zero to output in under 3 seconds</div>
+      <p>A user lands on any tool page → pastes input → sees result. No configuration, no options to set, no reading required. Default settings must always produce useful output.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">② Every label explains itself</div>
+      <p>No icon-only buttons on primary actions. Every input has a placeholder that says exactly what to paste. Every button label says exactly what will happen ("Format JSON", not just "Submit").</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--cyan)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">③ Errors help, not frustrate</div>
+      <p>If a user pastes invalid JSON, show "⚠ Invalid JSON — check line 3" not a generic red border. Error messages must always tell the user what went wrong AND what to do next.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--amber)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">④ One primary action per view</div>
+      <p>Each tool page has one clearly dominant action button. All other buttons are visually secondary. The user should never be confused about what to click first.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--purple)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">⑤ Confirm every user action</div>
+      <p>"Copy" button turns green and shows "✓ Copied!" for 2 seconds. "Clear" asks for confirmation. "Format" shows "✓ Valid JSON · 4 keys" in status bar. Users must always know their action worked.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--pink)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">⑥ Mobile is not an afterthought</div>
+      <p>Workspace panels stack vertically on mobile. Buttons have 44px minimum tap targets. Search is sticky. The tool must be fully usable on a phone — not just technically responsive.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">⑦ Privacy is shown, not just stated</div>
+      <p>Small "🔒 Processed in your browser — nothing is uploaded" note under every tool workspace. Users should feel safe pasting sensitive data like passwords, tokens, and API keys.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--cyan)">
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">⑧ Consistency over creativity</div>
+      <p>Every tool page looks identical in structure. Users learn the layout once. Breadcrumbs always in the same position. Copy button always bottom-left. Related tools always below the workspace.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>

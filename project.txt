@@ -1,0 +1,316 @@
+# 🌐 Website Plan: Developer Tools (SuperDevPro Clone)
+**Focus:** SEO-first, tool-per-page architecture  
+**Goal:** Rank for high-intent developer tool search queries  
+**Stack Recommendation:** Next.js 14 (App Router) + Tailwind CSS + MDX for FAQs
+
+---
+
+## 🏗️ Site Architecture
+
+```
+/                          → Home Page
+/extension                 → Extension Landing Page
+/tools/[slug]              → Individual Tool Pages (dynamic)
+/blog                      → (future) SEO blog content
+/sitemap.xml               → Auto-generated
+/robots.txt                → Crawl rules
+```
+
+---
+
+## 🏠 Page 1: Home Page (`/`)
+
+### Section Breakdown
+
+#### 1. Hero Section
+- **H1:** `Free Online Developer Tools — All in One Place`
+- **Subheadline:** "50+ tools for developers, designers, and engineers. Format JSON, decode JWTs, generate passwords, convert colors and more — right in your browser."
+- **CTA Buttons:** `[🚀 Try Tools Free]` `[⬇️ Install Chrome Extension]`
+- **Trust signals:** "No login required · Works offline · Open source"
+- **Visual:** Animated tool switcher / mini demo
+
+#### 2. Tool Categories Grid
+- Grouped by category (see full tool list below)
+- Each card: Tool icon + Name + One-line description + Link
+- Filter bar by category at the top (client-side, no reload)
+
+#### 3. Why Use Our Tools (Features Section)
+- Fast & lightweight · Privacy-first (no data sent to servers) · Works in browser · Also available as Chrome Extension
+
+#### 4. Extension CTA Banner
+- "Take your tools everywhere — Install the Chrome Extension"
+- Shows Chrome store rating widget
+
+#### 5. FAQ Section (Home)
+- Schema markup: `FAQPage`
+- Questions targeting "what is X tool" + "free online X tool" queries
+
+#### 6. Footer
+- Links to all category sections
+- "Tools by Category" mega-footer
+- Links to extension, blog, GitHub
+
+---
+
+## 🛠️ Tool Pages — Full List with SEO Slugs
+
+### 📁 Category 1: JSON Tools
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| JSON Formatter & Validator | `/tools/json-formatter` | "json formatter online" (90K/mo) |
+| JSON Minifier | `/tools/json-minifier` | "json minifier online" |
+| JSON to CSV Converter | `/tools/json-to-csv-converter` | "json to csv converter" |
+| JSON Diff Checker | `/tools/json-diff-checker` | "json diff checker online" |
+| JSON to YAML Converter | `/tools/json-to-yaml-converter` | "json to yaml online" |
+| YAML to JSON Converter | `/tools/yaml-to-json-converter` | "yaml to json converter" |
+
+### 📁 Category 2: Encoding & Decoding
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| Base64 Encoder & Decoder | `/tools/base64-encoder-decoder` | "base64 encode decode online" (60K/mo) |
+| URL Encoder & Decoder | `/tools/url-encoder-decoder` | "url encode decode online" |
+| HTML Entity Encoder & Decoder | `/tools/html-entity-encoder-decoder` | "html entity encoder online" |
+| JWT Decoder | `/tools/jwt-decoder` | "jwt decoder online" (40K/mo) |
+| Unicode Converter | `/tools/unicode-converter` | "unicode converter online" |
+
+### 📁 Category 3: CSS Tools
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| CSS Minifier | `/tools/css-minifier` | "css minifier online" |
+| CSS Formatter & Beautifier | `/tools/css-formatter` | "css formatter online" |
+| CSS Unit Converter | `/tools/css-unit-converter` | "css px to rem converter" |
+| CSS Gradient Generator | `/tools/css-gradient-generator` | "css gradient generator" |
+| Box Shadow Generator | `/tools/css-box-shadow-generator` | "css box shadow generator" |
+| Border Radius Generator | `/tools/css-border-radius-generator` | "css border radius generator" |
+| Flexbox Generator | `/tools/css-flexbox-generator` | "css flexbox generator online" |
+
+### 📁 Category 4: Color Tools
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| Color Picker | `/tools/color-picker` | "color picker online" (200K/mo) |
+| Color Converter (HEX/RGB/HSL) | `/tools/color-converter` | "hex to rgb converter" (80K/mo) |
+| Color Palette Generator | `/tools/color-palette-generator` | "color palette generator" |
+| Contrast Checker | `/tools/color-contrast-checker` | "color contrast checker wcag" |
+| Gradient Color Generator | `/tools/gradient-color-generator` | "gradient color generator" |
+
+### 📁 Category 5: Text & String Tools
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| Regex Tester & Debugger | `/tools/regex-tester` | "regex tester online" (50K/mo) |
+| Lorem Ipsum Generator | `/tools/lorem-ipsum-generator` | "lorem ipsum generator" (100K/mo) |
+| Text Diff Checker | `/tools/text-diff-checker` | "text diff checker online" |
+| Markdown Previewer | `/tools/markdown-previewer` | "markdown preview online" |
+| Word & Character Counter | `/tools/word-character-counter` | "word character counter online" |
+| Case Converter | `/tools/case-converter` | "text case converter online" |
+| String Escape / Unescape | `/tools/string-escape-unescape` | "string escape unescape online" |
+| Slug Generator | `/tools/slug-generator` | "url slug generator" |
+
+### 📁 Category 6: Security & Crypto
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| Hash Generator (MD5, SHA) | `/tools/hash-generator` | "md5 sha256 hash generator online" |
+| Password Generator | `/tools/password-generator` | "secure password generator" (150K/mo) |
+| UUID / GUID Generator | `/tools/uuid-generator` | "uuid generator online" (70K/mo) |
+| HMAC Generator | `/tools/hmac-generator` | "hmac generator online" |
+| Bcrypt Hash Generator | `/tools/bcrypt-generator` | "bcrypt hash generator online" |
+
+### 📁 Category 7: Numbers & Math
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| Unix Timestamp Converter | `/tools/unix-timestamp-converter` | "unix timestamp converter" (60K/mo) |
+| Number Base Converter | `/tools/number-base-converter` | "binary decimal hex converter" |
+| Byte Converter | `/tools/byte-converter` | "bytes kb mb gb converter" |
+| Roman Numeral Converter | `/tools/roman-numeral-converter` | "roman numeral converter" |
+
+### 📁 Category 8: JavaScript Tools
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| JavaScript Minifier | `/tools/javascript-minifier` | "js minifier online" |
+| JavaScript Formatter & Beautifier | `/tools/javascript-formatter` | "javascript formatter online" |
+| JS to JSON Converter | `/tools/js-object-to-json` | "javascript object to json converter" |
+
+### 📁 Category 9: HTML Tools
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| HTML Formatter & Beautifier | `/tools/html-formatter` | "html formatter online" |
+| HTML Minifier | `/tools/html-minifier` | "html minifier online" |
+| HTML to Markdown Converter | `/tools/html-to-markdown` | "html to markdown converter" |
+| Meta Tag Generator | `/tools/meta-tag-generator` | "meta tag generator seo" |
+
+### 📁 Category 10: Network & API
+| Tool Name | Slug | Target Keyword |
+|---|---|---|
+| HTTP Status Codes Reference | `/tools/http-status-codes` | "http status codes list" (90K/mo) |
+| MIME Types Reference | `/tools/mime-types` | "mime types list reference" |
+| IP Address Lookup | `/tools/ip-address-lookup` | "ip address lookup tool" |
+| URL Parser & Inspector | `/tools/url-parser` | "url parser online" |
+| Cron Expression Generator | `/tools/cron-expression-generator` | "cron job generator online" |
+
+---
+
+## 📄 Individual Tool Page Structure
+
+Every tool page (`/tools/[slug]`) follows this exact template:
+
+```
+┌─────────────────────────────────────────┐
+│  Breadcrumb: Home > Tools > [Tool Name] │
+├─────────────────────────────────────────┤
+│  HERO                                   │
+│  H1: [Tool Name] — Free Online Tool     │
+│  Short description (150–160 chars)      │
+│  Trust badges: Fast · Private · Free   │
+├─────────────────────────────────────────┤
+│  WORKING TOOL (Interactive)             │
+│  Input panel + Output panel             │
+│  Action buttons: Copy, Clear, Download  │
+├─────────────────────────────────────────┤
+│  ABOUT THIS TOOL (SEO Text)             │
+│  What it is, how it works, use cases   │
+│  300–500 words, naturally keyword-rich  │
+├─────────────────────────────────────────┤
+│  EXTENSION CTA BANNER                   │
+│  "Use [Tool Name] directly in Chrome"  │
+│  [Install Free Extension] button        │
+├─────────────────────────────────────────┤
+│  HOW TO USE (Step-by-step)              │
+│  Numbered steps with screenshots/GIFs  │
+│  Good for featured snippets             │
+├─────────────────────────────────────────┤
+│  RELATED TOOLS (Card Grid)              │
+│  4–6 tools from same/related category  │
+│  Internal linking for SEO              │
+├─────────────────────────────────────────┤
+│  FAQS (Tool-Specific)                   │
+│  5–7 questions with schema markup      │
+│  Targets "People Also Ask" in Google   │
+├─────────────────────────────────────────┤
+│  FOOTER                                 │
+└─────────────────────────────────────────┘
+```
+
+### SEO Metadata per Tool Page
+```
+Title:     [Tool Name] Online — Free & Fast | DevTools
+Description: Use our free [Tool Name] online. [One benefit]. No signup needed. Works instantly in your browser.
+OG Image:  Dynamic OG image with tool name + icon (use Vercel OG or Satori)
+Schema:    WebApplication + FAQPage + BreadcrumbList
+Canonical: https://yourdomain.com/tools/[slug]
+```
+
+---
+
+## 🚀 Page 3: Extension Landing Page (`/extension`)
+
+### Section Breakdown
+
+#### 1. Hero
+- **H1:** `The Ultimate Developer Toolkit — Right in Your Browser`
+- **Subheadline:** "50+ developer tools available with one click. No switching tabs. No logging in. Just install and build faster."
+- **CTA:** `[⬇️ Add to Chrome — It's Free]`
+- **Visual:** Browser mockup showing the extension popup in use
+- **Trust signals:** Chrome Web Store rating · Number of installs · "Works offline"
+
+#### 2. Problem → Solution Section
+- "Tired of Googling the same tools every day?"
+- Highlight the friction of 10 open tabs vs. one extension
+
+#### 3. Feature Showcase (Animated)
+- Tabbed or scrolling showcase of key tools
+- Short GIF/video per tool category
+
+#### 4. Tool Count + Categories Overview
+- "50+ tools across 10 categories"
+- Icon grid of all categories
+
+#### 5. Social Proof
+- Chrome Web Store reviews
+- Testimonials from developers
+- "Trusted by X+ developers worldwide"
+
+#### 6. How It Works (3 Steps)
+1. Install the extension (1 click)
+2. Click the icon in your toolbar
+3. Pick your tool & get to work
+
+#### 7. Compare Table
+| Feature | Our Extension | Visiting Sites | Other Extensions |
+|---|---|---|---|
+| Works offline | ✅ | ❌ | ⚠️ |
+| No account needed | ✅ | ✅ | ⚠️ |
+| 50+ tools | ✅ | ❌ | ❌ |
+| Free forever | ✅ | ⚠️ | ⚠️ |
+
+#### 8. FAQ (Extension-Specific)
+- Is it free? Does it collect data? Does it work on all sites? etc.
+
+#### 9. Final CTA
+- Large install button + Chrome Web Store badge
+
+---
+
+## 🔍 SEO Strategy
+
+### Keyword Strategy
+- **Category pages** target broad terms: "json tools online", "css tools for developers"
+- **Tool pages** target high-intent specific terms: "json formatter online free"
+- **Extension page** targets: "chrome extension developer tools", "best chrome extensions for developers"
+
+### Technical SEO Checklist
+- [ ] Next.js `generateMetadata()` per tool page (dynamic titles/descriptions)
+- [ ] Dynamic `sitemap.xml` covering all tool pages
+- [ ] `robots.txt` allowing full crawl
+- [ ] Structured data: `WebApplication`, `FAQPage`, `BreadcrumbList` on every page
+- [ ] Dynamic Open Graph images (Vercel OG / Satori)
+- [ ] Core Web Vitals: LCP < 2.5s, CLS < 0.1, FID < 100ms
+- [ ] Canonical tags on all pages
+- [ ] `hreflang` if multilingual in future
+- [ ] Internal linking: every tool links to 4–6 related tools
+- [ ] Breadcrumbs on all tool pages
+
+### Content SEO
+- [ ] Each tool page: 300–500 words of original descriptive content
+- [ ] FAQ schema on every page (5–7 questions targeting PAA boxes)
+- [ ] "How to use" section targeting featured snippets
+- [ ] Alt text on all images/screenshots
+- [ ] Tool name in URL, H1, first paragraph, and meta description
+
+### Link Building (Future)
+- Submit to: Product Hunt, Hacker News, dev.to, CSS-Tricks, Smashing Magazine directories
+- GitHub repo with README linking to site
+- Target "best online developer tools" roundup articles
+
+---
+
+## 📦 Content Templates
+
+### FAQ Template Per Tool (fill in per tool)
+1. What is [Tool Name] and what does it do?
+2. Is [Tool Name] free to use?
+3. Does [Tool Name] store or share my data?
+4. How do I use the [Tool Name] online?
+5. What's the difference between [Tool Name] online vs. the Chrome Extension?
+6. Can I use [Tool Name] offline?
+7. What formats does [Tool Name] support?
+
+### Tool Description Template (SEO copy formula)
+> "[Tool Name] is a free online tool that allows developers and engineers to [action] quickly and easily. Simply [input action], and the tool will instantly [output action]. No registration or installation required — works directly in your browser. Ideal for [use case 1], [use case 2], and [use case 3]."
+
+---
+
+## 📅 Website Build Timeline
+
+| Week | Deliverable |
+|---|---|
+| 1 | Next.js project setup, routing, design system, Tailwind config |
+| 2 | Home page (hero, category grid, FAQs, footer) |
+| 3 | Tool page template + 10 tools wired up (interactive) |
+| 4 | Remaining 40+ tools built and connected |
+| 5 | Extension landing page |
+| 6 | SEO layer: metadata, schema, sitemap, OG images |
+| 7 | QA, performance tuning, Lighthouse audits |
+| 8 | Launch 🚀 → submit to directories and Product Hunt |
+
+---
+
+*Total estimated tool pages at launch: ~50 | Target: 10–20 keywords ranking on page 1 within 90 days of launch.*
