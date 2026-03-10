@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env*
+!.env.example
+node_modules
+.next
+.claude
+design-system.html
+plan.txt
+project.txt
+Dockerfile
+.dockerignore
+README.md
+*.md
