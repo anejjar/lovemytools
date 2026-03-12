@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
 
-const inter = Inter({
+const displaySans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-display-sans",
+  weight: ["500", "600", "700", "800"],
+  display: "swap",
+});
+
+const bodySans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-body-sans",
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -49,7 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${displaySans.variable} ${bodySans.variable} ${jetbrainsMono.variable}`}
     >
       <body>
         <Script
@@ -65,7 +73,9 @@ export default function RootLayout({
           `}
         </Script>
         <Header />
-        <main>{children}</main>
+        <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
