@@ -99,3 +99,24 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* react-colorful: theme and size overrides */
+.color-picker-wrapper .react-colorful {
+  height: 200px;
+  width: 100%;
+  min-width: 200px;
+}
+.color-picker-wrapper .react-colorful__saturation {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.color-picker-wrapper .react-colorful__hue {
+  height: 14px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-top: 8px;
+}
+.color-picker-wrapper .react-colorful__pointer {
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}

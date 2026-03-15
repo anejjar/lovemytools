@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { HexColorPicker } from "react-colorful";
 import { parseColor, generateShades, rgbToHex, hslToRgb } from "./logic";
 import { CopyButton } from "@/components/shared/CopyButton";
 
@@ -37,15 +38,12 @@ export default function ColorPickerTool() {
     <div className="max-w-2xl space-y-6">
       {/* Main picker */}
       <div className="flex flex-wrap gap-6">
-        <div className="flex items-start gap-4">
-          <input
-            type="color"
-            value={hex}
-            onChange={(e) => handlePickerChange(e.target.value)}
-            className="h-24 w-24 cursor-pointer rounded-xl border border-[var(--border)] bg-transparent p-1"
-          />
+        <div className="flex flex-col items-start gap-4">
+          <div className="color-picker-wrapper rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2">
+            <HexColorPicker color={hex} onChange={handlePickerChange} />
+          </div>
           <div
-            className="h-24 w-48 rounded-xl border border-[var(--border)]"
+            className="h-12 w-full min-w-[12rem] rounded-xl border border-[var(--border)]"
             style={{ background: hex }}
           />
         </div>

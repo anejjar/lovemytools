@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm tsc:*)",
+      "Bash(pnpm build:*)",
+      "Bash(find /c/laragon/www/claude/lovemytools -type f \\\\\\( -name \"*.test.ts\" -o -name \"*.test.tsx\" -o -name \"*.spec.ts\" -o -name \"*.spec.tsx\" \\\\\\) ! -path \"*/node_modules/*\" 2>/dev/null | head -20)",
+      "Bash(pnpm add:*)",
+      "Bash(cd C:/laragon/www/claude/lovemytools && pnpm test --run 2>&1 | tail -60)",
+      "Bash(cd C:/laragon/www/claude/lovemytools && pnpm exec vitest run 2>&1 | tail -80)",
+      "Bash(cd C:/laragon/www/claude/lovemytools && pnpm exec vitest run 2>&1 | grep -E \"FAIL|Error|AssertionError|Expected|Received\" | head -60)",
+      "Bash(find /c/laragon/www/claude/lovemytools/src/api -type f -name \"*.ts\" -o -name \"*.tsx\" 2>/dev/null | head -20)"
+    ]
+  }
+}

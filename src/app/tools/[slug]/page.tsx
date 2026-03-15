@@ -5,6 +5,9 @@ import { getToolComponent } from "@/tools/_components";
 import { generateToolMetadata, generateStructuredData } from "@/lib/metadata";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { FeedbackWidget } from "@/components/shared/FeedbackWidget";
+import { ToolTracker } from "@/components/shared/ToolTracker";
+import { ExtensionCTABanner } from "@/components/tool/ExtensionCTABanner";
 
 interface ToolPageProps {
   params: Promise<{ slug: string }>;
@@ -164,11 +167,20 @@ export default async function ToolPage({ params }: ToolPageProps) {
           </section>
         )}
 
-        {/* Last updated */}
-        <p className="text-xs text-[var(--text3)]">
-          Last updated: {new Date(meta.lastUpdated).toLocaleDateString("en-US", { year: "numeric", month: "long" })}
-        </p>
+        {/* Extension CTA */}
+        <ExtensionCTABanner />
+
+        {/* Feedback */}
+        <div className="flex flex-col gap-3 border-t border-[var(--border)] pt-6">
+          <FeedbackWidget slug={slug} />
+          <p className="text-xs text-[var(--text3)]">
+            Last updated: {new Date(meta.lastUpdated).toLocaleDateString("en-US", { year: "numeric", month: "long" })}
+          </p>
+        </div>
       </div>
+
+      {/* Usage tracker (fires once on mount, renders nothing) */}
+      <ToolTracker slug={slug} />
     </>
   );
 }
