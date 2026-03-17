@@ -8,7 +8,19 @@
       "Bash(cd C:/laragon/www/claude/lovemytools && pnpm test --run 2>&1 | tail -60)",
       "Bash(cd C:/laragon/www/claude/lovemytools && pnpm exec vitest run 2>&1 | tail -80)",
       "Bash(cd C:/laragon/www/claude/lovemytools && pnpm exec vitest run 2>&1 | grep -E \"FAIL|Error|AssertionError|Expected|Received\" | head -60)",
-      "Bash(find /c/laragon/www/claude/lovemytools/src/api -type f -name \"*.ts\" -o -name \"*.tsx\" 2>/dev/null | head -20)"
+      "Bash(find /c/laragon/www/claude/lovemytools/src/api -type f -name \"*.ts\" -o -name \"*.tsx\" 2>/dev/null | head -20)",
+      "Bash(grep -E \"bun\\\\.\\(lockb|lock\\)$|pnpm-lock\\\\.yaml$\")",
+      "Bash(grep -E \"bun\\\\.\\(lock|lockb\\)$\")",
+      "Bash(find /home/anejjar/projects/personal/mytools/src/components -type f -name *.tsx -o -name *.ts)",
+      "Bash(find /home/anejjar/projects/personal/mytools/src/lib -type f -name *.ts -o -name *.tsx)",
+      "Bash(grep -r posthog /home/anejjar/projects/personal/mytools/src --include=*.ts --include=*.tsx)",
+      "Bash(curl -fsSL https://bun.sh/install)",
+      "Bash(bash)",
+      "Bash(source ~/.zshrc)",
+      "Bash(bun --version)",
+      "Bash(~/.bun/bin/bun --version)",
+      "Bash(~/.bun/bin/bun add:*)",
+      "Bash(~/.bun/bin/bun run:*)"
     ]
   }
 }
