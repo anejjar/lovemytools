@@ -1,13 +1,10 @@
-FROM node:20-alpine AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && corepack prepare pnpm@7.33.1 --activate
+FROM oven/bun:1-alpine AS base
 
 # ─── Dependencies ────────────────────────────────────────────────────────────
 FROM base AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
 
 # ─── Builder ─────────────────────────────────────────────────────────────────
 FROM base AS builder
@@ -18,12 +15,16 @@ COPY . .
 # Build-time env vars (non-secret public vars only)
 ARG NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
 
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY
+ENV NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN pnpm build
+RUN bun run build
 
 # ─── Runner ──────────────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner

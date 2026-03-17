@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import posthog from "posthog-js";
 
 interface ToolTrackerProps {
   slug: string;
@@ -22,6 +23,8 @@ export function ToolTracker({ slug }: ToolTrackerProps) {
     }).catch(() => {
       // Non-critical
     });
+
+    posthog.capture("tool_used", { tool: slug });
   }, [slug]);
 
   return null;

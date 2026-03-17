@@ -5,6 +5,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
+import { Providers } from "./providers";
 
 const displaySans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -72,11 +73,13 @@ export default function RootLayout({
             gtag('config', 'G-HSW4LMJH0N');
           `}
         </Script>
-        <Header />
-        <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
-          {children}
-        </main>
-        <Footer />
+        <Providers>
+          <Header />
+          <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
+            {children}
+          </main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

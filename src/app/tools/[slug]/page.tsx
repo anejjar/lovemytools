@@ -9,6 +9,8 @@ import { FeedbackWidget } from "@/components/shared/FeedbackWidget";
 import { ToolTracker } from "@/components/shared/ToolTracker";
 import { ExtensionCTABanner } from "@/components/tool/ExtensionCTABanner";
 
+export const revalidate = 86400;
+
 interface ToolPageProps {
   params: Promise<{ slug: string }>;
 }
