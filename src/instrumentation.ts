@@ -8,7 +8,7 @@ export async function register() {
       const t = Date.now();
       try {
         const { neon } = await import("@neondatabase/serverless");
-        neon(process.env.DATABASE_URL); // just creates the client, no network call
+        neon(process.env.DATABASE_URL);
         console.log(`[PERF] DB client ready: ${Date.now() - t}ms`);
       } catch (e) {
         console.error(`[PERF] DB client FAILED (${Date.now() - t}ms):`, e);
@@ -18,21 +18,19 @@ export async function register() {
     }
 
     // Test Redis connectivity
-    if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    if (process.env.REDIS_URL) {
       const t = Date.now();
       try {
-        const { Redis } = await import("@upstash/redis");
-        const redis = new Redis({
-          url: process.env.UPSTASH_REDIS_REST_URL,
-          token: process.env.UPSTASH_REDIS_REST_TOKEN,
-        });
+        const { getRedis } = await import("./lib/redis");
+        const redis = getRedis()!;
+        await redis.connect();
         await redis.ping();
         console.log(`[PERF] Redis ping OK: ${Date.now() - t}ms`);
       } catch (e) {
-        console.error(`[PERF] Redis FAILED (${Date.now() - t}ms):`, e);
+        console.error(`[PERF] Redis FAILED (${Date.now() - t}ms):`, (e as Error).message);
       }
     } else {
-      console.warn("[PERF] UPSTASH_REDIS_* not set — rate limiting disabled");
+      console.warn("[PERF] REDIS_URL not set — rate limiting disabled");
     }
 
     console.log(`[PERF] Server startup complete: ${Date.now() - start}ms`);
