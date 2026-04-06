@@ -9,10 +9,16 @@ declare global {
 
 function createDb() {
   if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL environment variable is not set");
+    throw new Error(
+      "[DB] DATABASE_URL is not set — database features are unavailable. " +
+      "Set DATABASE_URL in your environment to enable DB functionality."
+    );
   }
+  const t = Date.now();
   const sql = neon(process.env.DATABASE_URL);
-  return drizzle(sql, { schema });
+  const db = drizzle(sql, { schema });
+  console.log(`[PERF] DB client created: ${Date.now() - t}ms`);
+  return db;
 }
 
 export const db = global.__db ?? createDb();
