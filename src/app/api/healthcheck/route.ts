@@ -11,12 +11,14 @@ export async function GET() {
     node_env: process.env.NODE_ENV ?? "unknown",
   };
 
-  // DB ping
+  // DB ping — raw SELECT 1, no table dependency
   if (process.env.DATABASE_URL) {
     const t = Date.now();
     try {
-      const { db, tools } = await import("@/db");
-      await db.select().from(tools).limit(1);
+      const { default: postgres } = await import("postgres");
+      const sql = postgres(process.env.DATABASE_URL, { max: 1 });
+      await sql`SELECT 1`;
+      await sql.end();
       checks.db_ping_ms = String(Date.now() - t);
     } catch (e) {
       checks.db_ping_ms = `ERROR ${Date.now() - t}ms`;
