@@ -7,17 +7,10 @@ import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/config/site";
 import { Providers } from "./providers";
 
-const displaySans = Plus_Jakarta_Sans({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-display-sans",
-  weight: ["500", "600", "700", "800"],
-  display: "swap",
-});
-
-const bodySans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-body-sans",
-  weight: ["400", "500"],
+  variable: "--font-plus-jakarta",
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -58,14 +51,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${displaySans.variable} ${bodySans.variable} ${jetbrainsMono.variable}`}
+      className={`${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
       <body>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-HSW4LMJH0N"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
