@@ -7,11 +7,13 @@ export async function register() {
     if (process.env.DATABASE_URL) {
       const t = Date.now();
       try {
-        const { neon } = await import("@neondatabase/serverless");
-        neon(process.env.DATABASE_URL);
-        console.log(`[PERF] DB client ready: ${Date.now() - t}ms`);
+        const { default: postgres } = await import("postgres");
+        const sql = postgres(process.env.DATABASE_URL, { max: 1 });
+        await sql`SELECT 1`;
+        await sql.end();
+        console.log(`[PERF] DB ping OK: ${Date.now() - t}ms`);
       } catch (e) {
-        console.error(`[PERF] DB client FAILED (${Date.now() - t}ms):`, e);
+        console.error(`[PERF] DB FAILED (${Date.now() - t}ms):`, (e as Error).message);
       }
     } else {
       console.warn("[PERF] DATABASE_URL not set — DB features disabled");

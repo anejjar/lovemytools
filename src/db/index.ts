@@ -1,5 +1,5 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 
 declare global {
@@ -10,13 +10,16 @@ declare global {
 function createDb() {
   if (!process.env.DATABASE_URL) {
     throw new Error(
-      "[DB] DATABASE_URL is not set — database features are unavailable. " +
-      "Set DATABASE_URL in your environment to enable DB functionality."
+      "[DB] DATABASE_URL is not set — database features are unavailable."
     );
   }
   const t = Date.now();
-  const sql = neon(process.env.DATABASE_URL);
-  const db = drizzle(sql, { schema });
+  const client = postgres(process.env.DATABASE_URL, {
+    max: 10,
+    idle_timeout: 30,
+    connect_timeout: 10,
+  });
+  const db = drizzle(client, { schema });
   console.log(`[PERF] DB client created: ${Date.now() - t}ms`);
   return db;
 }

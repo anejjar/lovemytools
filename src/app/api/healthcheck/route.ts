@@ -15,12 +15,12 @@ export async function GET() {
   if (process.env.DATABASE_URL) {
     const t = Date.now();
     try {
-      const { db } = await import("@/db");
-      await db.execute("SELECT 1" as unknown as Parameters<typeof db.execute>[0]);
+      const { db, tools } = await import("@/db");
+      await db.select().from(tools).limit(1);
       checks.db_ping_ms = String(Date.now() - t);
     } catch (e) {
       checks.db_ping_ms = `ERROR ${Date.now() - t}ms`;
-      checks.db_error = String(e);
+      checks.db_error = (e as Error).message;
     }
   }
 
@@ -34,7 +34,7 @@ export async function GET() {
       checks.redis_ping_ms = String(Date.now() - t);
     } catch (e) {
       checks.redis_ping_ms = `ERROR ${Date.now() - t}ms`;
-      checks.redis_error = String(e);
+      checks.redis_error = (e as Error).message;
     }
   }
 
